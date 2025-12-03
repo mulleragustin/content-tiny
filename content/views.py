@@ -1,6 +1,25 @@
 from django.http import JsonResponse
 from django.views import View
+from django.db import connection
 from .models import Blog, Proyecto, Categoria
+
+
+class HealthCheckView(View):
+    """Endpoint para verificar el estado del servidor"""
+
+    def get(self, request):
+        # Verificar conexión a la base de datos
+        db_status = 'ok'
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT 1')
+        except Exception as e:
+            db_status = f'error: {str(e)}'
+
+        return JsonResponse({
+            'status': 'ok' if db_status == 'ok' else 'degraded',
+            'database': db_status,
+        })
 
 
 class BlogListView(View):

@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import (
+    HealthCheckView,
     BlogListView,
     BlogDetailView,
     ProyectoListView,
@@ -8,6 +9,9 @@ from .views import (
 )
 
 urlpatterns = [
+    # Health Check
+    path('health/', HealthCheckView.as_view(), name='health-check'),
+
     # Blogs
     path('blogs/', BlogListView.as_view(), name='blog-list'),
     path('blogs/<slug:slug>/', BlogDetailView.as_view(), name='blog-detail'),
